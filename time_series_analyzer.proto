@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package time_series_analyzer;
+
+// Message representing the configuration for the STPSD analyzer.
+message STPSDConfig {
+  double windowSize = 1;  // Window size in seconds
+  double overlap = 2;     // Overlap size in seconds
+}
+
+// Message representing a single STPSD data point.
+message STPSDDataPoint {
+  repeated double frequencies = 1;  // List of frequencies
+  repeated double powerLevels = 2;  // List of power levels
+}
+
+// Service definition for the STPSD analyzer.
+service STPSDAnalyzerService {
+  // Analyzes the input time series and returns the Short Time Power Spectral Density.
+  rpc analyzeSTPSD (TimeSeriesData) returns (stream STPSDDataPoint) {}
+
+  // Stops the analysis process and ends the stream of STPSD data.
+  rpc stopAnalysis (Empty) returns (Empty) {}
+}
+
+message Empty{}
+
+// Message representing the time series data to be analyzed.
+message TimeSeriesData {
+  repeated double data = 1;  // List of time series data points
+}
